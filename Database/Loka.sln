@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32901.215
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Loka", "Loka\Loka.sqlproj", "{1749B801-ED98-46FD-869E-C22D190CE60D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1749B801-ED98-46FD-869E-C22D190CE60D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1749B801-ED98-46FD-869E-C22D190CE60D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1749B801-ED98-46FD-869E-C22D190CE60D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{1749B801-ED98-46FD-869E-C22D190CE60D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1749B801-ED98-46FD-869E-C22D190CE60D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1749B801-ED98-46FD-869E-C22D190CE60D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A4963E2B-404D-403A-9170-3B966DACA6FE}
+	EndGlobalSection
+EndGlobal
