@@ -1,0 +1,16 @@
+{
+	"name": "AzureSQL_DW_db",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlLokaDW",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DataWarehouse"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

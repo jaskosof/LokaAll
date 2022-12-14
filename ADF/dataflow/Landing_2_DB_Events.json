@@ -1,0 +1,150 @@
+{
+	"name": "Landing_2_DB_Events",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Landing_DL_folder",
+						"type": "DatasetReference"
+					},
+					"name": "source"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AzureSQL_DW_table",
+						"type": "DatasetReference"
+					},
+					"name": "VehicleEvent",
+					"description": "Sink to VehicleEvent table"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSQL_DW_table",
+						"type": "DatasetReference"
+					},
+					"name": "OperatingPeriod",
+					"description": "Sink to OperatingPeriodTable"
+				}
+			],
+			"transformations": [
+				{
+					"name": "expandParameters",
+					"description": "Expand all json parameters into separate columns. Nested json is also expanded here"
+				},
+				{
+					"name": "filterOperatingPeriods",
+					"description": "Filtering Operating Period related records"
+				},
+				{
+					"name": "filterVehicleEvents",
+					"description": "Filtering Vehicle Event related records"
+				},
+				{
+					"name": "selectVehicleEventData",
+					"description": "Select only data needed for the Vehicle Event table"
+				},
+				{
+					"name": "selectOperatingPeriodData",
+					"description": "Select only data for Operating Period table"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          at as string,",
+				"          data as (finish as string, id as string, location as (at as string, lat as double, lng as double), start as string),",
+				"          event as string,",
+				"          on as string,",
+				"          organization_id as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     moveFiles: ['landing','archive'],",
+				"     documentForm: 'documentPerLine') ~> source",
+				"source select(mapColumn(",
+				"          at,",
+				"          id = data.id,",
+				"          start = data.start,",
+				"          finish = data.finish,",
+				"          lat = data.location.lat,",
+				"          lng = data.location.lng,",
+				"          location_at = data.location.at,",
+				"          event,",
+				"          on,",
+				"          organization_id",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> expandParameters",
+				"expandParameters filter(on == 'operating_period') ~> filterOperatingPeriods",
+				"expandParameters filter(on == 'vehicle') ~> filterVehicleEvents",
+				"filterVehicleEvents select(mapColumn(",
+				"          at,",
+				"          id,",
+				"          start,",
+				"          finish,",
+				"          lat,",
+				"          lng,",
+				"          location_at,",
+				"          event,",
+				"          on,",
+				"          organization_id",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectVehicleEventData",
+				"filterOperatingPeriods select(mapColumn(",
+				"          at,",
+				"          id,",
+				"          start,",
+				"          finish,",
+				"          lat,",
+				"          lng,",
+				"          location_at,",
+				"          event,",
+				"          on,",
+				"          organization_id",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectOperatingPeriodData",
+				"selectVehicleEventData sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          Id = id,",
+				"          CreatedDateTime = at,",
+				"          Event = event,",
+				"          OrganizationId = organization_id,",
+				"          Lat = lat,",
+				"          Lng = lng",
+				"     )) ~> VehicleEvent",
+				"selectOperatingPeriodData sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          Id = id,",
+				"          CreatedDateTime = at,",
+				"          StartDateTime = start,",
+				"          FinishDateTime = finish,",
+				"          OrganizationId = organization_id",
+				"     )) ~> OperatingPeriod"
+			]
+		}
+	}
+}

@@ -1,0 +1,22 @@
+{
+	"name": "Src_DL_folder",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Azure_DL",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DataLake"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "src"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

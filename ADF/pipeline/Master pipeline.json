@@ -1,0 +1,46 @@
+{
+	"name": "Master pipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "Load Src Data to DL",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Src to Landing",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Load Data to DW",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Load Src Data to DL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Load to DW",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Master"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-11-22T11:34:45Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
